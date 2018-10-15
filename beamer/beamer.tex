@@ -4,7 +4,21 @@
 \usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage{amssymb}
+\usepackage{tcolorbox}
+\usepackage{mathtools} % \coloneqq
 \usetheme{rwth}
+
+\include{rwth-colors}
+
+\def\remark#1{\textcolor{red}{#1}}
+
+\def\R{\mathbb{R}}
+
+\AtBeginSection{\frame[noframenumbering,plain]{
+		\frametitle{}
+		\tableofcontents[currentsection]
+}}
+
 \begin{document}
     \title[Seminar Differential Games]{Seminar Differential Games}
     \author[P. Finke]{Patrick Finke}
@@ -17,8 +31,142 @@
 	%\setbeamercovered{transparent}
 	%\setbeamertemplate{navigation symbols}{}
 	\frame[plain]{\maketitle}
+
+    \begin{frame}
+        \tableofcontents
+    \end{frame}
 	
-    \begin{frame}{Test Frame}
-		%\frametitle{}
+    \section{Introduction}
+    \begin{frame}{\secname}
+		\begin{tcolorbox}[colback=rwth-10,colframe=rwth,title=Static Game for two players, sharp corners]
+            \begin{itemize}
+                \item two sets of strategies $A$ and $B$
+                \item payoff functions $\Phi^A, \Phi^B: A \times B \rightarrow \R$
+                \item goal of player A: $\max_{a \in A} \Phi^A(a, b)$
+                \item goal of player B: $\max_{b \in B} \Phi^B(a, b)$
+            \end{itemize}
+        \end{tcolorbox}
+
+        \vfill
+
+		\begin{tcolorbox}[colback=rwth-10,colframe=rwth,title=Assumption, sharp corners]
+            $A, B$ compact metric spaces, $\Phi^A, \Phi^B$ continuous
+        \end{tcolorbox}
 	\end{frame}
+
+    \section{Example}
+
+    \section{Solution Concepts}
+    % Pareto
+    \begin{frame}{\secname}
+		\begin{tcolorbox}[colback=rwth-10,colframe=rwth,title=Pareto optimality, sharp corners]
+            $(a^*, b^*)$ is Pareto optimal if there exist no $(a, b) \in A \times B$ such that
+            $$\Phi^A(a, b) > \Phi^A(a^*, b^*) \quad \text{and} \quad \Phi^B(a, b) \geq \Phi^B(a^*, b^*)$$
+            \center{or}
+            $$\Phi^B(a, b) > \Phi^B(a^*, b^*) \quad \text{and} \quad \Phi^A(a, b) \geq \Phi^A(a^*, b^*)$$
+        \end{tcolorbox}
+
+        \vfill
+
+        It is not possible to strictly increase the payoff of one player without strictly decreasing the payoff of the other.
+    \end{frame}
+
+    % Stackelberg
+    \begin{frame}{\secname}
+        set of best replies: $R^B(a) = \{ b \in B \mid \Phi^B(a,b) = \max_{\omega \in B} \Phi^B(a, \omega) \}$
+
+        \vfill
+
+        Idea:
+        \begin{itemize}
+            \item A leader, B follower
+            \item A announces $a \in A$
+            \item B chooses $b^* \in R^B(a)$ say $b^* = \beta(a)$
+            \item goal of player A is $\max_{a \in A} \Phi^A(a, \beta(a))$
+        \end{itemize}
+
+        \vfill
+
+		\begin{tcolorbox}[colback=rwth-10,colframe=rwth,title=Stackelberg equilibrium, sharp corners]
+            $(a_S, b_S)$ is Stackelberg equilibrium if
+            \begin{itemize}
+                \item $b_S \in R^B(a_S)$
+                \item $\Phi^A(a, b) \leq \Phi^A(a_S, b_S) \quad \forall (a, b) \textrm{ with } b_S \in R^B(a)$
+            \end{itemize}
+        \end{tcolorbox}
+
+        \vfill
+
+        {\color{red} definition in worten}
+    \end{frame}
+
+    \begin{frame}{\secname}
+		\begin{tcolorbox}[colback=rwth-10,colframe=rwth,title=Nash equilibrium, sharp corners]
+            $(a^*, b^*)$ is Nash equilibrium if for every $a \in A, b \in B$
+            $$\Phi^A(a, b^*) \leq \Phi^A(a^*, b^*)$$
+            \center{and}
+            $$\Phi^B(a^*, b) \leq \Phi^B(a^*, b^*)$$
+        \end{tcolorbox}
+
+        \vfill
+
+        No player can change his payoff by changing his strategy as long as the other player sticks to the equilibrium strategy.
+    \end{frame}
+
+    \section{Existence of Nash Equilibria}
+    \begin{frame}{\secname}
+		\begin{tcolorbox}[colback=rwth-10,colframe=rwth,title=Theorem, sharp corners]
+            Assume $A, B \subset \R^n$ compact, convex; $\Phi^A, \Phi^B$ continuous and
+            $$a \mapsto \Phi^A(a,b)\textrm{ is a concave function of }a\textrm{, for all }b \in B$$
+            $$b \mapsto \Phi^B(a,b)\textrm{ is a concave function of }b\textrm{, for all }a \in A$$
+            Then the non-cooperative game admits a Nash equilibrium.
+        \end{tcolorbox}
+
+
+		\begin{tcolorbox}[colback=rwth-10,colframe=rwth,title=Kakutani, sharp corners]
+            Let $K \subset \R^n$ compact, convex. Let $F: K \mapsto \R^n$ be an upper semicontinuous multifunction with compact, convex values such that $F(x) \subset K$ for all $x \in K$. Then there exists $\bar{x} \in K$ such that
+            $$\bar{x} \in F(\bar{x}).$$
+        \end{tcolorbox}
+    \end{frame}
+
+    \section{Randomized Strategies}
+
+    \section{Zero-Sum Games}
+
+    \section{The Cooperative-Competitive Solution}
+    \begin{frame}{\secname}
+        Setting:
+        \begin{itemize}
+            \item 2 player game (no zero-sum)
+                $$\Phi^A, \Phi^B: A \times B \rightarrow \R$$
+            \item goal: adopt $(a^\#, b^\#)$ such that
+                $$V^\# \coloneqq \Phi^A(a^\#, b^\#) + \Phi^B(a^\#, b^\#) = \max_{(a,b) \in A \times B} \Phi^A(a, b) + \Phi^B(a, b)$$
+            \item may need a side payment if e.g. $\Phi^B(a^\#, b^\#) \ll \Phi^A(a^\#, b^\#)$
+        \end{itemize}
+    \end{frame}
+
+    \begin{frame}{\secname}
+        Split the game
+        $$\Phi^{\textrm{coop}}(a, b) \coloneqq \frac{\Phi^A(a, b) + \Phi^B(a, b)}{2}$$
+        $$\Phi^{\textrm{comp}}(a, b) \coloneqq \frac{\Phi^A(a, b) - \Phi^B(a, b)}{2}$$
+        such that
+        $$\Phi^A = \Phi^{\textrm{coop}} + \Phi^{\textrm{comp}}$$
+        $$\Phi^B = \Phi^{\textrm{coop}} - \Phi^{\textrm{comp}}$$
+    \end{frame}
+
+    \begin{frame}{\secname}
+		\begin{tcolorbox}[colback=rwth-10,colframe=rwth,title=co-co value, sharp corners]
+            $$\left( \frac{V^{\textrm{coop}}}{2} + V^{\textrm{comp}}, \frac{V^{\textrm{coop}}}{2} - V^{\textrm{comp}} \right)$$
+        \end{tcolorbox}
+
+		\begin{tcolorbox}[colback=rwth-10,colframe=rwth,title=co-co solution, sharp corners]
+            strategies $(a^\#, b^\#) \in Å \times B$, side payment $b$ from player B to player A such that
+            $$\Phi^A(a^\#, b^\#) + p = \frac{V^{\textrm{coop}}}{2} + V^{\textrm{comp}}$$
+            $$\Phi^B(a^\#, b^\#) - p = \frac{V^{\textrm{coop}}}{2} - V^{\textrm{comp}}$$
+        \end{tcolorbox}
+    \end{frame}
+
+    \begin{frame}{\secname}
+        \remark{Beispiel prisoners dilemma}
+    \end{frame}
 \end{document}
