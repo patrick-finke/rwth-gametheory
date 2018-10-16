@@ -6,6 +6,7 @@
 \usepackage{amssymb}
 \usepackage{tcolorbox}
 \usepackage{mathtools} % \coloneqq
+\usepackage{multirow} % better tables, www.tablesgenerator.com
 \usetheme{rwth}
 
 \include{rwth-colors}
@@ -38,7 +39,7 @@
 	
     \section{Introduction}
     \begin{frame}{\secname}
-		\begin{tcolorbox}[colback=rwth-10,colframe=rwth,title=Static Game for two players, sharp corners]
+		\begin{tcolorbox}[colback=rwth-10,colframe=rwth,title=Static Game (for two players), sharp corners]
             \begin{itemize}
                 \item two sets of strategies $A$ and $B$
                 \item payoff functions $\Phi^A, \Phi^B: A \times B \rightarrow \R$
@@ -50,11 +51,28 @@
         \vfill
 
 		\begin{tcolorbox}[colback=rwth-10,colframe=rwth,title=Assumption, sharp corners]
-            $A, B$ compact metric spaces, $\Phi^A, \Phi^B$ continuous
+			\begin{equation}
+				\label{eq-assumption}
+				\tag{A}
+            	A, B\textrm{ compact metric spaces, }\Phi^A, \Phi^B\textrm{ continuous}
+            \end{equation}
         \end{tcolorbox}
 	\end{frame}
 
-    \section{Example}
+    \begin{frame}{\secname}
+    \textcolor{rwth}{Example:} prisoner's dilemma
+    
+    \vfill
+    
+    \begin{figure}
+    	\centering
+		\includegraphics[width=0.7\textwidth]{pics/prisoner.jpg}
+	\end{figure}
+
+	\vfill
+	
+	\textcolor{rwth}{Question:} Which pair of strategies is optimal?
+    \end{frame}
 
     \section{Solution Concepts}
     % Pareto
@@ -71,13 +89,23 @@
         It is not possible to strictly increase the payoff of one player without strictly decreasing the payoff of the other.
     \end{frame}
 
+    \begin{frame}{\secname}
+	\textcolor{rwth}{Example:} prisoner's dilemma
+	
+	\vfill
+	
+	\begin{figure}
+		\centering
+		\includegraphics[width=0.7\textwidth]{pics/prisoner_pareto.jpg}
+	\end{figure}
+	
+	\center{Pareto optimal solutions in red.}
+	\end{frame}
+
     % Stackelberg
     \begin{frame}{\secname}
-        set of best replies: $R^B(a) = \{ b \in B \mid \Phi^B(a,b) = \max_{\omega \in B} \Phi^B(a, \omega) \}$
 
-        \vfill
-
-        Idea:
+        \textcolor{rwth}{Idea:}
         \begin{itemize}
             \item A leader, B follower
             \item A announces $a \in A$
@@ -94,10 +122,10 @@
                 \item $\Phi^A(a, b) \leq \Phi^A(a_S, b_S) \quad \forall (a, b) \textrm{ with } b_S \in R^B(a)$
             \end{itemize}
         \end{tcolorbox}
-
-        \vfill
-
-        {\color{red} definition in worten}
+    
+    	\vfill
+    	
+    	best reply map: $R^B(a) = \{ b \in B \mid \Phi^B(a,b) = \max_{\omega \in B} \Phi^B(a, \omega) \}$
     \end{frame}
 
     \begin{frame}{\secname}
@@ -110,8 +138,31 @@
 
         \vfill
 
-        No player can change his payoff by changing his strategy as long as the other player sticks to the equilibrium strategy.
+        No player can increase his payoff by changing his strategy as long as the other player sticks to the equilibrium strategy.
     \end{frame}
+
+    \begin{frame}{\secname}
+	\textcolor{rwth}{Example:} prisoner's dilemma
+	
+	\vfill
+	
+	\begin{figure}
+		\centering
+		\includegraphics[width=0.7\textwidth]{pics/prisoner_nash.jpg}
+	\end{figure}
+	
+	\center{Nash equilibria in red.}
+	\end{frame}
+
+	\begin{frame}{\secname}
+		\textcolor{rwth}{Some properties of Nash equilibria are:}
+		\begin{enumerate}
+			\item Nash equilibria may not exist,
+			\item Nash equilibria need not be unique,
+			\item different Nash equilibria can yield different payoffs,
+			\item a Nash equilibrium may not be Pareto optimal.
+		\end{enumerate}
+	\end{frame}
 
     \section{Existence of Nash Equilibria}
     \begin{frame}{\secname}
@@ -121,23 +172,180 @@
             $$b \mapsto \Phi^B(a,b)\textrm{ is a concave function of }b\textrm{, for all }a \in A$$
             Then the non-cooperative game admits a Nash equilibrium.
         \end{tcolorbox}
+	\end{frame}
+
+	\begin{frame}{\secname}
+		\begin{minipage}{.15\textwidth}
+			\textcolor{rwth}{Recall:} 
+		\end{minipage}%
+		\begin{minipage}{.7\textwidth}
+			$R^A(b) = \{ a \in A \mid \Phi^A(a, b) = \max_{\omega \in A} \Phi^(\omega, b)\}$\\
+			$R^B(a) = \{ b \in B \mid \Phi^B(a, b) = \max_{\omega \in B} \Phi^(a, \omega)\}$
+		\end{minipage}
+	
+		\vfill
+		
+		\begin{tcolorbox}[colback=rwth-10,colframe=rwth,title=Nash equilibrium as fixed point, sharp corners]
+			$(a^*, b^*)$ is Nash equilibrium iff
+			$$a^* \in R^A(b^*)\textrm{ and }b^* \in R^B(a^*).$$
+		\end{tcolorbox}
+	
+		\vfill
+	
+		Since
+		\begin{align*}
+			& \Phi^A(a, b^*) \leq \Phi^A(a^*, b^*) \ \forall a \in A\\
+			\Leftrightarrow {} & {} \Phi^A(a^*, b^*) = \max_{a \in A} \Phi^A(a, b^*)\\
+			\Leftrightarrow {} & {} a^* \in R^A(b^*) 
+		\end{align*}
+	\end{frame}
 
 
+	\begin{frame}{\secname}
+		\begin{tcolorbox}[colback=rwth-10,colframe=rwth,title=upper semi-continuous, sharp corners]
+			$F: X \rightrightarrows Y$ a multifunction with compact values.
+			\begin{itemize}
+				\item $F$ is upper semicontinuous iff $\forall x \in X \, \forall \epsilon > 0 \, \exists \delta = \delta(\epsilon) > 0$ such that $F(x') \subseteq B_{\epsilon}(F(x))$ for all $d(x', x) < \delta$
+				\item equivalently $graph(F) = \{ (x,y) \mid y \in F(x) \}$ is closed
+				\item $F, G$ upper semicontinuous implies $(F \times G): (x,y) \mapsto F(x) \times G(x)$ also upper semicontinuous
+			\end{itemize}
+			
+		\end{tcolorbox}
 		\begin{tcolorbox}[colback=rwth-10,colframe=rwth,title=Kakutani, sharp corners]
             Let $K \subset \R^n$ compact, convex. Let $F: K \mapsto \R^n$ be an upper semicontinuous multifunction with compact, convex values such that $F(x) \subset K$ for all $x \in K$. Then there exists $\bar{x} \in K$ such that
-            $$\bar{x} \in F(\bar{x}).$$
+            \center{$\bar{x} \in F(\bar{x}).$}
         \end{tcolorbox}
     \end{frame}
 
     \section{Randomized Strategies}
+    
+    \begin{frame}{\secname}
+    	\begin{tcolorbox}[colback=rwth-10,colframe=rwth,title=upper semi-continuous, sharp corners]
+    		\begin{itemize}
+    			\item strategy for player A is probability distribution $\mu \in P(A)$
+    			\item strategy for player B is probability distribution $\nu \in P(B)$
+    			\item payoff functions
+    			$$\tilde{\Phi}^A(\mu, \nu) = \int_{A \times B} \Phi^A(a,b) \, d(\mu, \nu)$$
+    			$$\tilde{\Phi}^B(\mu, \nu) = \int_{A \times B} \Phi^B(a,b) \, d(\mu, \nu)$$
+    		\end{itemize}
+        \end{tcolorbox}
+    	
+    	\vfill
+    	
+    	\textcolor{rwth}{Note:} $\tilde{\Phi}^A, \tilde{\Phi}^B$ are expected values of the payoffs, if $\mu$ and $\nu$ are chosen independently
+    	
+    	\textcolor{rwth}{Note:}  $\{\textrm{pure strategies}\}\subseteq \{\textrm{randomized strategies}\}$
+    \end{frame}
+
+	\begin{frame}{\secname}
+	    \begin{tcolorbox}[colback=rwth-10,colframe=rwth,title=existence of Nash equilibria for randomized strategies, sharp corners]
+    		Let \eqref{eq-assumption} hold. There exist $\mu^* \in P(A)$ and $\nu^* \in P(B)$ such that
+    		$$\tilde{\Phi}^A(\mu, \nu^*) \leq \tilde{\Phi}^A(\mu^*, \nu^*)\textrm{ for all } \mu \in P(A)$$
+    		\center{and}
+    		$$\tilde{\Phi}^B(\mu^*, \nu) \leq \tilde{\Phi}^B(\mu^*, \nu^*)\textrm{ for all } \nu \in P(B)$$
+    	\end{tcolorbox}
+	\end{frame}
 
     \section{Zero-Sum Games}
+    
+    \begin{frame}{\secname}
+  		\begin{tcolorbox}[colback=rwth-10,colframe=rwth,title=Zero-Sum Game, sharp corners]
+   			\begin{itemize}
+   				\item consider again static game: $A$, $B$, $\Phi^A$, $\Phi^B$
+   				\item spacial case $\Phi^A + \Phi^B = 0$
+   				\item single payoff function sufficient
+				$$\Phi \coloneqq \Phi^A = - \Phi^B$$
+				\item goal of player A is $\max_{a \in A} \Phi(a, b)$\\
+				goal of player B is $\min_{b \in B} \Phi(a, b)$
+   			\end{itemize}
+   		\end{tcolorbox}
+   	
+   		\vfill
+   	
+  		\begin{tcolorbox}[colback=rwth-10,colframe=rwth,title=Assumption, sharp corners]
+			\begin{equation*}
+				\label{eq-assumption-zerosum}
+				\tag{A'}
+				A, B\textrm{ compact metric spaces, }\Phi\textrm{ continuous}
+			\end{equation*}
+		\end{tcolorbox}
+    \end{frame}
+
+	\begin{frame}{\secname}
+		Suppose advantage of information:
+		\begin{itemize}
+			\item player B chooses $b \in B$
+			\item player A chooses $\alpha(b) \in A$ such that
+			$$\Phi(\alpha(b), b) = \max_{a \in A} \Phi(a,b)$$
+			\item goal of player B is $\min_{b \in B} \Phi(\alpha(b), b)$
+		\end{itemize}
+		This yields:
+		$$V^- \coloneqq \max_{a \in A} \min_{b \in B} \Phi(a, b) \leq \min_{b \in B} \max_{a \in A} \Phi(a,b) \eqqcolon V^+$$
+		
+		\vfill
+		
+		\begin{tcolorbox}[colback=rwth-10,colframe=rwth,title=Value of the Game, sharp corners]
+			If $V^- = V^+ \eqqcolon V$, then $V$ is called value of the game.
+		\end{tcolorbox}
+	\end{frame}
+
+	%\begin{frame}{\secname}
+	%	\remark{DELETE IF TOO LONG}
+	%	\begin{tcolorbox}[colback=rwth-10,colframe=rwth,title=saddle point, sharp corners]
+	%		$(a^*, b^*) \in A \times B$ such that
+	%		$$\min_{b \in B} \Phi(a^*, b) = \Phi(a^*, b^*) = \max_{a \in A} \Phi(a, b^*)$$
+	%	\end{tcolorbox}
+	%
+	%	\vfill
+	%
+	%	\textcolor{rwth}{Note:} For a zero-sum game each saddle point is a Nash equilibrium and vice versa, e.g.
+	%	\begin{align*}
+	%		& {} \Phi(a, b^*) \leq \Phi(a^*, b^*)\\
+	%		\Leftrightarrow {} & {} \max_{a \in A} \Phi(a, b^*) = \Phi(a^*, b^*)\\
+	%		& {} \textrm{(recall }\Phi = \Phi^A = - \Phi^B\textrm{)}
+	%	\end{align*}
+	%\end{frame}
+
+	%\begin{frame}{\secname}
+	%	\remark{DELETE IF TOO LONG}
+	%	\begin{tcolorbox}[colback=rwth-10,colframe=rwth,title=value and saddle point, sharp corners]
+	%		Let \eqref{eq-assumption-zerosum} hold. The zero-sum game has a value $V$ iff a saddle point $(a^*, b^*)$ exists. In this case
+	%		$$V = V^- = V^+ = \Phi(a^*, b^*).$$
+	%	\end{tcolorbox}
+	%
+	%	\vfill
+	%	
+	%	\textcolor{rwth}{Note:} As
+	%	$$(a^*, b^*)\textrm{ Nash} \Leftrightarrow (a^*, b^*) \textrm{ saddle point} \Leftrightarrow V = \Phi(a^*, b^*)$$
+	%	all Nash equilibria yield the same payoff.
+	%	
+	%	\vfill
+	%	
+	%	\textcolor{rwth}{Note:} value of the game well defined (at least for randomized strategies)
+	%\end{frame}
+
+	% note: this is the short version of previous two
+	\begin{frame}{\secname}
+		%\remark{delete if too SHORT}
+		\begin{tcolorbox}[colback=rwth-10,colframe=rwth,title=value and Nash equilibrium, sharp corners]
+			Let \eqref{eq-assumption-zerosum} hold. The zero-sum game has a value $V$ iff a Nash equilibrium $(a^*, b^*)$ exists. In this case
+			$$V = V^- = V^+ = \Phi(a^*, b^*).$$
+		\end{tcolorbox}
+		
+		\vfill
+		
+		\textcolor{rwth}{Note:} In Zero-Sum Games all Nash equilibria yield the same payoff.
+		
+		\vfill
+		
+		\textcolor{rwth}{Note:} The value of the game is well defined (at least for randomized strategies)
+	\end{frame}
 
     \section{The Cooperative-Competitive Solution}
     \begin{frame}{\secname}
         Setting:
         \begin{itemize}
-            \item 2 player game (no zero-sum)
+            \item 2 player static game (no zero-sum)
                 $$\Phi^A, \Phi^B: A \times B \rightarrow \R$$
             \item goal: adopt $(a^\#, b^\#)$ such that
                 $$V^\# \coloneqq \Phi^A(a^\#, b^\#) + \Phi^B(a^\#, b^\#) = \max_{(a,b) \in A \times B} \Phi^A(a, b) + \Phi^B(a, b)$$
@@ -147,26 +355,60 @@
 
     \begin{frame}{\secname}
         Split the game
-        $$\Phi^{\textrm{coop}}(a, b) \coloneqq \frac{\Phi^A(a, b) + \Phi^B(a, b)}{2}$$
-        $$\Phi^{\textrm{comp}}(a, b) \coloneqq \frac{\Phi^A(a, b) - \Phi^B(a, b)}{2}$$
+        $$\Phi^{\#}(a, b) \coloneqq \frac{\Phi^A(a, b) + \Phi^B(a, b)}{2}$$
+        $$\Phi^{\flat}(a, b) \coloneqq \frac{\Phi^A(a, b) - \Phi^B(a, b)}{2}$$
         such that
-        $$\Phi^A = \Phi^{\textrm{coop}} + \Phi^{\textrm{comp}}$$
-        $$\Phi^B = \Phi^{\textrm{coop}} - \Phi^{\textrm{comp}}$$
+        $$\Phi^A = \Phi^{\#} + \Phi^{\flat}$$
+        $$\Phi^B = \Phi^{\#} - \Phi^{\flat}$$
+        
+        \vfill
+        
+        \textcolor{rwth}{Note:} $\Phi^\# \rightarrow \frac{V^\#}{2}$, $\Phi^{\flat} \rightarrow V^{\flat}$ (as value of the game)
     \end{frame}
 
     \begin{frame}{\secname}
 		\begin{tcolorbox}[colback=rwth-10,colframe=rwth,title=co-co value, sharp corners]
-            $$\left( \frac{V^{\textrm{coop}}}{2} + V^{\textrm{comp}}, \frac{V^{\textrm{coop}}}{2} - V^{\textrm{comp}} \right)$$
+            $$\left( \frac{V^{\#}}{2} + V^{\flat}, \frac{V^{\#}}{2} - V^{\flat} \right)$$
         \end{tcolorbox}
+    
+    	\vfill
 
 		\begin{tcolorbox}[colback=rwth-10,colframe=rwth,title=co-co solution, sharp corners]
-            strategies $(a^\#, b^\#) \in Å \times B$, side payment $b$ from player B to player A such that
-            $$\Phi^A(a^\#, b^\#) + p = \frac{V^{\textrm{coop}}}{2} + V^{\textrm{comp}}$$
-            $$\Phi^B(a^\#, b^\#) - p = \frac{V^{\textrm{coop}}}{2} - V^{\textrm{comp}}$$
+            strategies $(a^\#, b^\#) \in A \times B$, side payment $b \in \R$ from player B to player A such that
+            $$\Phi^A(a^\#, b^\#) + p = \frac{V^{\#}}{2} + V^{\flat}$$
+            $$\Phi^B(a^\#, b^\#) - p = \frac{V^{\#}}{2} - V^{\flat}$$
         \end{tcolorbox}
     \end{frame}
 
     \begin{frame}{\secname}
-        \remark{Beispiel prisoners dilemma}
-    \end{frame}
+	\textcolor{rwth}{Example:} prisoner's dilemma
+	
+	\vfill
+	
+		\begin{figure}
+			\centering
+			\includegraphics[width=0.5\textwidth]{pics/prisoner_coco.jpg}
+			\center{co-co solution in red; $b = 0$}
+			
+			\begin{minipage}{.5\textwidth}
+				\centering
+				\includegraphics[width=1.0\textwidth]{pics/prisoner_cococoop.jpg}
+				\center{$\frac{V^\#}{2} = -1$}
+			\end{minipage}%
+			\begin{minipage}{.5\textwidth}
+				\centering
+				\includegraphics[width=1.0\textwidth]{pics/prisoner_cococomp.jpg}
+				\center{$V^\flat = 0$}
+			\end{minipage}
+		\end{figure}
+	\end{frame}
+
+	\begin{frame}[plain]
+		\centering
+		\topskip0pt
+		\vspace*{\fill}
+		Thank you for your kind attention!
+		\vspace*{\fill}
+		%
+	\end{frame}
 \end{document}
