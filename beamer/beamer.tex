@@ -24,7 +24,7 @@
     \title[Seminar Differential Games]{Seminar Differential Games}
     \author[P. Finke]{Patrick Finke}
     \email{patrick.finke@rwth-aachen.de}
-	\subtitle{Introduction to Static Games}
+	\subtitle{Introduction to \textbf{Static Games}\\based on Bressan, \emph{Noncooperative Differential Games. A Tutorial, 2010}}
 	%\logo{}
 	%\institute{}
     \date[]{October 17th, 2018}
@@ -60,7 +60,7 @@
 	\end{frame}
 
     \begin{frame}{\secname}
-    \textcolor{rwth}{Example:} prisoner's dilemma
+    \textcolor{rwth}{Example:} Prisoner's dilemma
     
     \vfill
     
@@ -83,10 +83,14 @@
             \center{or}
             $$\Phi^B(a, b) > \Phi^B(a^*, b^*) \quad \text{and} \quad \Phi^A(a, b) \geq \Phi^A(a^*, b^*)$$
         \end{tcolorbox}
-
+    
         \vfill
 
         It is not possible to strictly increase the payoff of one player without strictly decreasing the payoff of the other.
+        
+       	\vfill
+
+       	\textcolor{rwth}{Note:} favourable from a social standpoint
     \end{frame}
 
     \begin{frame}{\secname}
@@ -125,7 +129,11 @@
     
     	\vfill
     	
-    	best reply map: $R^B(a) = \{ b \in B \mid \Phi^B(a,b) = \max_{\omega \in B} \Phi^B(a, \omega) \}$
+    	\textcolor{rwth}{Note:} Models asymmetry of information
+    
+    	\vfill
+    	
+    	(best reply map: $R^B(a) = \{ b \in B \mid \Phi^B(a,b) = \max_{\omega \in B} \Phi^B(a, \omega) \}$)
     \end{frame}
 
     \begin{frame}{\secname}
@@ -139,6 +147,10 @@
         \vfill
 
         No player can increase his payoff by changing his strategy as long as the other player sticks to the equilibrium strategy.
+        
+        \vfill
+        
+        \textcolor{rwth}{Note:} symmetric situation, no means to cooperate, do not share information
     \end{frame}
 
     \begin{frame}{\secname}
@@ -220,7 +232,7 @@
     \section{Randomized Strategies}
     
     \begin{frame}{\secname}
-    	\begin{tcolorbox}[colback=rwth-10,colframe=rwth,title=upper semi-continuous, sharp corners]
+    	\begin{tcolorbox}[colback=rwth-10,colframe=rwth,title=Randomized Strategies, sharp corners]
     		\begin{itemize}
     			\item strategy for player A is probability distribution $\mu \in P(A)$
     			\item strategy for player B is probability distribution $\nu \in P(B)$
