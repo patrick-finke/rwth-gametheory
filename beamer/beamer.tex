@@ -123,7 +123,7 @@
             $(a_S, b_S)$ is Stackelberg equilibrium if
             \begin{itemize}
                 \item $b_S \in R^B(a_S)$
-                \item $\Phi^A(a, b) \leq \Phi^A(a_S, b_S) \quad \forall (a, b) \textrm{ with } b_S \in R^B(a)$
+                \item $\Phi^A(a, b) \leq \Phi^A(a_S, b_S) \quad \forall (a, b) \textrm{ with } b \in R^B(a)$
             \end{itemize}
         \end{tcolorbox}
     
@@ -191,8 +191,8 @@
 			\textcolor{rwth}{Recall:} 
 		\end{minipage}%
 		\begin{minipage}{.7\textwidth}
-			$R^A(b) = \{ a \in A \mid \Phi^A(a, b) = \max_{\omega \in A} \Phi^(\omega, b)\}$\\
-			$R^B(a) = \{ b \in B \mid \Phi^B(a, b) = \max_{\omega \in B} \Phi^(a, \omega)\}$
+			$R^A(b) = \{ a \in A \mid \Phi^A(a, b) = \max_{\omega \in A} \Phi^A(\omega, b)\}$\\
+			$R^B(a) = \{ b \in B \mid \Phi^B(a, b) = \max_{\omega \in B} \Phi^B(a, \omega)\}$
 		\end{minipage}
 	
 		\vfill
@@ -215,11 +215,11 @@
 
 	\begin{frame}{\secname}
 		\begin{tcolorbox}[colback=rwth-10,colframe=rwth,title=upper semi-continuous, sharp corners]
-			$F: X \rightrightarrows Y$ a multifunction with compact values.
+			$Y$ compact, $F: X \rightrightarrows Y$ a multifunction with nonempty, compact values. Then the following are equivalent:
 			\begin{itemize}
-				\item $F$ is upper semicontinuous iff $\forall x \in X \, \forall \epsilon > 0 \, \exists \delta = \delta(\epsilon) > 0$ such that $F(x') \subseteq B_{\epsilon}(F(x))$ for all $d(x', x) < \delta$
-				\item equivalently $graph(F) = \{ (x,y) \mid y \in F(x) \}$ is closed
-				\item $F, G$ upper semicontinuous implies $(F \times G): (x,y) \mapsto F(x) \times G(x)$ also upper semicontinuous
+				\item $F$ is upper semicontinuous (i.e. $\forall x \in X \, \forall \epsilon > 0 \, \exists \delta = \delta(\epsilon) > 0$ such that $F(x') \subseteq B_{\epsilon}(F(x))$ for all $d(x', x) < \delta$)
+				\item $graph(F) = \{ (x,y) \mid y \in F(x) \}$ is closed
+				%\item $F, G$ upper semicontinuous implies $(F \times G): (x,y) \mapsto F(y) \times G(x)$ also upper semicontinuous
 			\end{itemize}
 			
 		\end{tcolorbox}
