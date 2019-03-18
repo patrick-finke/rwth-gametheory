@@ -32,7 +32,8 @@
 \def\I{\mathcal{I}}
 \def\B{\mathcal{B}}
 
-\newcommand*{\bigchi}{\mbox{\Large$\chi$}}% big chi
+%\newcommand*{\bigchi}{\mbox{\Large$\chi$}}% big chi
+\newcommand*{\bigchi}{\mathcal{X}}% big chi
 \newcommand*{\mi}{\boldsymbol} % multiindex
 
 \DeclareMathOperator*{\argmax}{arg\,max}
@@ -46,65 +47,89 @@
 \maketitle{}
 
 \begin{abstract}
-    \cite{bressan2010}
+    In this seminar report, we are going to give an introduction to static games in game theory. The content will be heavily inspired by section 2 of \cite{bressan2010}. However, in contrast to \cite{bressan2010}, we will try to extend definitions and statements to an arbitrary number of players, wherever it is sensible to do so.
+
+    In section~\ref{sec:static-games} of this report, we explain the base setup, including a definition of a $N$-player static game together with some examples. In section~\ref{sec:solution-concepts} we explore two different solution concepts for static games, namely the Pareto optimum and Nash equilibrium. We will write down some basic properties and find the solutions to the example games in section~\ref{sec:static-games}. We continue our analysis of the Nash equilibrium in section~\ref{sec:existence-nash}, where we proof a fundamental result on the existence of such Nash equilibria. In section~\ref{sec:randomized-strategies}, we extend this result to the class of randomized strategies, which will allow us to drop some of the assumptions we made earlier.
+
+    We are going to fall back to $2$-player games for the last two sections. Section~\ref{sec:zero-sum-games} will be about so called zero-sum games. We will look at the notions of saddle point and value of the game of such zero-sum games and connect them to the Nash equilibrium. At the end, in section~\ref{sec:co-co-solution}, we will take a look at the cooperative-competitive solution, which is a solution conecpt designed in such a way, that it should become appealing for two parties to cooperate.
+
+    Additionally, on request of my supervisor, the appendix will include a brief summary of the other talks of the seminar.
 \end{abstract}
 
-\tableofcontents{} % included automatically?
+\tableofcontents{}
 
 \section{Static Games}
 \label{sec:static-games}
 
-Let us first define some notation we will use throughout this report.
+As we will find ourselves often in a situation where we want to emphasize the $i$-th component of a vector, let us define a notation that makes this easy and readable. The following will be similar to what can be found in \cite{schwarz}.
+
 \begin{notation}
-    For a vector $x \in \R^n$ we write
+    \label{not:notation}
+    For a vector
     \begin{equation*}
-        x = (x_1, \dotsc, x_n) \eqqcolon (x_i, x_{-i})
+        x = (x_1, \dotsc, x_n) \in \R^n
     \end{equation*}
-    to put emphasis on the $i$-th index. Given $y \in \R^n$, this notation allows us to substitute the $i$-th entry of $x$ by writing
+    we write $x_i$ to represent the $i$-th component of that vector and
+    \begin{equation*}
+        x_{-i} = (x_1, \dotsc, x_{i-1}, x_{i+1}, \dotsc, x_n)
+    \end{equation*}
+    to represent the rest. Sometimes, if for example subscripts become to crowded, we switch to superscripts $x^i$ and $x^{-i}$. These have alway priority, i.e. $(x_i)_j$ becomes $x^i_j$ and not $x^j_i$.
+
+    A notation that derives from this idea, that we shall use quite often, is the following: For $x \in \R^n$ we write
+    \begin{equation*}
+        (x_i, x_{-i}) \coloneqq (x_1, \dotsc, x_{i-1}, x_i, x_{i+1}, \dotsc, x_n) = x
+    \end{equation*}
+    to put emphasize of the $i$-th component. This also allows us to quite easily substitute a component. Let $y \in \R^n$, then
     \begin{equation*}
         (y_i, x_{-i}) = (x_1, \dotsc, x_{i-1}, y_i, x_{i+1}, \dotsc, x_n).
     \end{equation*}
+    Again, we may switch from subscripts to superscripts.
 \end{notation}
 
-
-\todo{vergleiche \cite{schwarz}}
-
-To start with the theory of static games, our first definition should be the following
+To start with the theory of static games, our first definition should be the following~\cite{schwarz}
 \begin{definition}[static game]
-    A (static) game for $N \in \N$ players is described by sets of strategies $X_i$ and payoff functions $\Phi_i$ for each player $i=1,\dotsc,N$. We write $\Gamma = \{X_i, \Phi_i\}_{i=1}^N$. The goal of each player is to maximize her payoff, i.e.
+    A (static) game for $N \in \N$ players is described by
+    \begin{enumerate}
+        \item sets of strategies $X_i$
+        \item payoff functions $\Phi_i: \bigtimes_{i=1}^N X_i \rightarrow \R$
+    \end{enumerate}
+    for each player $i=1,\dotsc,N$. We write $\Gamma = \{X_i, \Phi_i\}_{i=1}^N$ and call $\Gamma$ a $N$-player game. The goal of each player is to maximize her payoff, i.e.
     \begin{equation*}
         \max_{x_i \in X_i} \Phi(x_i, x_{-i}).
     \end{equation*}
     Let us also define
     \begin{align*}
-        \bigchi \coloneqq \bigtimes_{i=1}^N X_i \quad \text{and} \quad \bigchi^{-i} \coloneqq \bigtimes_{j \not= i} X_i
+        \bigchi \coloneqq \bigtimes_{i=1}^N X_i \quad \text{and} \quad \bigchi^{-i} \coloneqq \bigtimes_{j \not= i} X_j
     \end{align*}
     for convenience.
     \label{def:static-game}
 \end{definition}
 
+For our analysis, we make the following assumptions.
 \begin{assumption}
-    Given a game $\Gamma = \{X_i, \Phi_i\}_{i=1}^N$ we assume each $X_i$ to be a compact metric space and each $\Phi_i$ to be continuous.
+    Given a $N$-player game $\Gamma = \{X_i, \Phi_i\}_{i=1}^N$, we assume each $X_i$ to be a compact metric space and each $\Phi_i$ to be continuous.
     \label{ass:static-game}
 \end{assumption}
 
-\todo{vergleiche \cite{bressan2010,schwarz}}
+To get a better understanding of definition~\ref{def:static-game} and to have some material we can apply future concepts on, we want to look at some examples. Before we proceed, note the following: Out of simplicity, we only choose examples that involve two players and a finite number of strategies. However, with the exeptions of sections~\ref{sec:zero-sum-games} and \ref{sec:co-co-solution}, the theory is by no means limited by the number of players or strategies.
+
+The following example can also be found in~\cite{bressan2010, schwarz}.
 \begin{example}[Prisoner's Dilemma]
-    \label{ex:prisonders-dilemma}
-    Two men are caught by the police after robbing a bank. They are kept in different cells, with no means of communication with one another. The following applies:
+    \label{ex:prisoners-dilemma}
+    Two men are caught by the police after robbing a bank. They are kept in different cells, with no means of communication with one another. The following outcomes are possible:
     \begin{itemize}
         \item If only one suspect admits the robbery, he can blame the other for it. In this case the confessing suspect will get a prison sentence of 1 year, whereas the other suspect will get a prison sentence of 10 years.
         \item If both suspects confess and blame each other, they both will get a prison sentence of 5 years.
         \item If none of the suspects confess, the police can only hold them for illegal gun possession. This results in a 2 years prison sentence for each of the suspects.
     \end{itemize}
-    This can be modelled as a game for 2 players in the following way: The sets of strategies for the players are $X_1 = X_2 = \{C,N\}$, where $C$ stands for confessing and $N$ for not confessing. The playoff functions are as follows:
+    This situation can be modelled as a game for 2 players in the following way: The sets of strategies for the players are $X_1 = X_2 = \{C,N\}$, where $C$ indicates confessing and $N$ not confessing. The playoff functions are as follows:
     \begin{align*}
         f_1(N,N)&=-2,&f_1(N,C)&=-10,&f_1(C,N)&=-1,&f_1(C,C)&=-5,\\
         f_2(N,N)&=-2,&f_2(N,C)&=-1,&f_2(C,N)&=-10,&f_2(C,C)&=-5.
     \end{align*}
     Note that the payoffs of the players are negative. This is due to the goal of each player being to maximize her own payoff and thus, minimize her prison sentence.
 
-    We can also represent this 2 player game as a bi-matrix, that is a matrix with 2 values in each of its fields. The bi-matrix can be found in table~\ref{tab:prisonders-dilemma}.
+    We can also represent this 2 player game as a bi-matrix, that is a matrix with two values in each of its fields. The bi-matrix for the prisoner's dilemma can be found in table~\ref{tab:prisonders-dilemma}.
 
 \begin{table}
     \centering
@@ -119,9 +144,10 @@ To start with the theory of static games, our first definition should be the fol
 \end{table}
 \end{example}
 
+Another example, that should be well known to most (and can also be found in~\cite{schwarz}), is
 \begin{example}[Rock-Paper-Scissors]
     \label{ex:rock-paper-scissors}
-    Two players each choose either rock, paper or scissors at the same time. The rules for winning the game are: paper covers rock, scissors cut paper, rock smashes scissors. Thus the strategie sets of both players are given by $X_1 = X_2 = \{\text{rock},\text{paper},\text{scissors}\}$. If we denote winning with a payoff of $1$ and losing with a payoff of $-1$, we can represent the game as the bi-matrix in table~\ref{tab:rock-paper-scissors}.
+    Two players each choose either rock, paper or scissors at the same time. The rules for winning the game are: paper covers rock, scissors cut paper, rock smashes scissors. Thus the strategie sets of both players are given by $X_1 = X_2 = \{\text{rock},\text{paper},\text{scissors}\}$. If we denote winning with a payoff of $1$, losing with a payoff of $-1$ and a draw with a payoff of $0$, we can represent the game as the bi-matrix in table~\ref{tab:rock-paper-scissors}.
 
 \begin{table}
     \centering
@@ -141,15 +167,16 @@ To start with the theory of static games, our first definition should be the fol
 \section{Solution Concepts}
 \label{sec:solution-concepts}
 
-In this section we will look at two different solution concepts, namely the Pareto optimum and Nash equilibrium. For the latter, we will analyze its properties and prove an existence theorem in section~\ref{sec:existence-nash}. At the end of this section, we revisit some of the examples of section~\ref{sec:static-games}.
+In this section we will look at two different solution concepts, namely the Pareto optimum and Nash equilibrium. For the latter, we will analyze its properties and later prove an existence theorem in section~\ref{sec:existence-nash}. We also revisit the examples of section~\ref{sec:static-games} to find their Pareto optima and Nash equilibria.
 
 Let us first look at the Pareto optimum.
 \begin{definition}[Pareto optimum]
-    Consider a game $\Gamma = \{X_i, \Phi_i\}_{i=1}^N$. We call a strategy vector $x^* \in \bigchi$ Pareto optimal iff there exists no other strategy vector $x \in \bigchi$ and player index $1 \leq i \leq N$ such that
+    Consider a $N$-player game $\Gamma = \{X_i, \Phi_i\}_{i=1}^N$. We call a strategy vector $x^* \in \bigchi$ Pareto optimal iff there exists no other strategy vector $x \in \bigchi$ and player index $1 \leq i \leq N$ such that
     \begin{equation*}
+        %\Phi_i(x_i, x_{-i}) > \Phi_i(x_i^*, x_{-i}^*) \quad \text{and} \quad \Phi_j(x_i, x_{-i}) \geq \Phi_j(x_i^*, x_{-i}^*)
         \Phi_i(x) > \Phi_i(x^*) \quad \text{and} \quad \Phi_j(x) \geq \Phi_j(x^*)
     \end{equation*}
-    for all $j \not= i$.
+    for all $1 \leq j \leq N$, $j \not= i$.
     \label{def:pareto-optimum}
 \end{definition}
 
@@ -161,9 +188,10 @@ Let us first look at the Pareto optimum.
 Let us find the Pareto optima in the examples of section~\ref{sec:static-games}.
 
 \begin{example}[Prisoner's Dilemma]
+    \label{ex:pareto-optimum-prisoners-dilemma}
     We can easily check (by hand) that the Pareto optimal solutions of the Prisoner's Dilemma (see table~\ref{tab:prisonders-dilemma}) are the following: $(C, N)$, $(N, C)$ and $(N, N)$.
 
-    Let us for example check $(C, N)$. There is no pair of strategies that could (strictly) increase the payoff of player $1$. For player $2$ all other pairs of strategies strictly increase her payoff, but the payoff of player $1$ gets strictly decreased for each of them. Thus $(C, N)$ is Pareto optimal.
+    Let us for example check $(C, N)$. There is no pair of strategies that could (strictly) increase the payoff of player $1$. For player $2$ all other pairs of strategies strictly increase her payoff, but the payoff of player $1$ gets strictly decreased for each of them. Thus $(C, N)$ is Pareto optimal. By symmetry, this also proves that $(N, C)$ is Pareto optimal.
 \end{example}
 
 \begin{example}[Rock-Paper-Scissors]
@@ -173,26 +201,26 @@ Let us find the Pareto optima in the examples of section~\ref{sec:static-games}.
 
 \begin{remark}
     \label{rem:pareto-optimum-zero-sum}
-    In a zero-sum game all strategy vectors are Pareto optimal. We call a game zero-sum iff the sum of the payoff functions is zero, i.e.
+    In a $N$-player zero-sum game all strategy vectors are Pareto optimal. We call a game $\Gamma = \{X_i, \Phi_i\}_{i=1}^N$ zero-sum iff the sum of the payoff functions is zero, i.e.
     \begin{equation*}
         \sum_{i=1}^N \Phi_i(x) = 0 \quad \forall \, x \in \bigchi.
     \end{equation*}
     In section~\ref{sec:zero-sum-games} we will explore zero-sum games of two players in more detail.
 
-    Let us continue with the short proof of the statement. Assume there exists a strategy $\widetilde{x} \in \bigchi$ that is not Pareto optimal, i.e. there exists $x \in \bigchi$ and $1 \leq i \leq N$ such that
+    Let us continue with a short proof of the statement. Assume there exists a strategy $\widetilde{x} \in \bigchi$ that is not Pareto optimal, i.e. there exists $x \in \bigchi$ and $1 \leq i \leq N$ such that
     \begin{equation*}
         \Phi_i(x) > \Phi_i(\widetilde{x}) \quad \text{and} \quad \Phi_j(x) \geq \Phi_j(\widetilde{x})
     \end{equation*}
-    for all $j \not= i$. Using the zero-sum property of the game we get
+    for all $1 \leq j \leq N$, $j \not= i$. Using the zero-sum property of the game we get
     \begin{equation*}
         1 = \sum_{j=1}^N \Phi_j(\widetilde{x}) = \Phi_i(\widetilde{x}) + \sum_{j \not= i} \Phi_j(\widetilde{x}) < \Phi_i(x) + \sum_{j \not= i} \Phi_j(x) = \sum_{j=1}^N \Phi_j(x) = 1,
     \end{equation*}
     which is a contradiction.\qed
 \end{remark}
 
-Let us now look at the Nash equilibrium.
+Let us now take a look at the Nash equilibrium, a key concept for the theory of competitive games, which will accompany us through the following sections.
 \begin{definition}[Nash equilibrium]
-    Consider a game $\Gamma = \{X_i, \Phi_i\}_{i=1}^N$. A strategy vector $x^{*} \in \bigchi$ is called a Nash equilibrium iff
+    Consider a $N$-player game $\Gamma = \{X_i, \Phi_i\}_{i=1}^N$. A strategy vector $x^{*} \in \bigchi$ is called a Nash equilibrium iff
     \begin{equation*}
         \Phi_i(x_i, x^*_{-i}) \leq \Phi_i(x^*_i, x^*_{-i}) \quad \forall \, x_i \in X_i
     \end{equation*}
@@ -200,14 +228,14 @@ Let us now look at the Nash equilibrium.
     \label{def:nash-equilibrium}
 \end{definition}
 
-Unlike the Pareto optimum, a Nash equilibrium models a competitive situation.
+Unlike the Pareto optimum, a Nash equilibrium models a competitive situation, as described in the following
 \begin{remark}
     A strategy vector $x^* \in \bigchi$ is called Nash equilibrium iff no player can increase her payoff by changing her strategie, as long as the other players stick to the equilibrium strategy. Thus, the Nash equilibrium can be considered optimal in a competitive setting: Each player does not deviate from the equilibrium strategy in fear of the possibility of the other players choosing the equilibrium strategy and the loss that a deviation could cause in this situation.
 \end{remark}
 
-Let us now find an equivalent formulation to the definition of Nash equilibrium. We need the following
+Let us now find an equivalent formulation to the definition of Nash equilibrium~\cite{bressan2010, schwarz}. We need the following
 \begin{definition}[best response map]
-    Consider a game $\Gamma = \{X_i, \Phi_i\}_{i=1}^N$ and let $X_{-i} \in \bigchi^{-i}$. We call the set-valued function
+    Consider a $N$-player game $\Gamma = \{X_i, \Phi_i\}_{i=1}^N$ and let $x \in \bigchi$. For $1 \leq i \leq N$, we call the set-valued function
     \begin{equation*}
         x_{-i} \mapsto S_i(x_{-i}) \coloneqq \argmax_{x_i \in X_i} \Phi_i(x_i, x_{-i})
     \end{equation*}
@@ -218,9 +246,8 @@ Let us now find an equivalent formulation to the definition of Nash equilibrium.
     \label{def:best-response-map}
 \end{definition}
 
-Now we can formulate the following
 \begin{lemma}
-    Consider a game $\Gamma = \{X_i, \Phi_i\}_{i=1}^N$. A vector $x^* \in \bigchi$ is a Nash equilibrium if and only if it is a fixed point of the best response map, i.e.
+    Consider a $N$-player game $\Gamma = \{X_i, \Phi_i\}_{i=1}^N$. A vector $x^* \in \bigchi$ is a Nash equilibrium if and only if it is a fixed point of the best response map, i.e.
     \begin{equation*}
         x^* \in S(x^*).
     \end{equation*}
@@ -237,8 +264,9 @@ Now we can formulate the following
     Thus, $x^* \in S(x^*)$ is equivalent to $x^*$ being a Nash equilibrium.
 \end{proof}
 
+Let us find the Nash equilibria in the examples from section~\ref{sec:static-games}.
 \begin{example}[Prisoner's Dilemma]
-    By checking, we find $(C,C)$ as the unique Nash equilibrium. Combining this result with the result in example~\ref{ex:prisonders-dilemma}, we see that all strategies but the Nash equilibrium are Pareto optimal, i.e. optimal from a social standpoint. This explains why the Prisoner's Dilemma is such a dilemma: The Nash equilibrium (which is optimal from a competitive standpoint and thus will propably be choosen by the two prisoners given their situation) is the only stratgy that is not favourable for the group.
+By checking, we find $(C,C)$ as the unique Nash equilibrium. Combining this result with the result in example~\ref{ex:pareto-optimum-prisoners-dilemma}, we see that all strategies but the Nash equilibrium are Pareto optimal, i.e. optimal from a social standpoint. This explains why the prisoner's dilemma is such a dilemma: The Nash equilibrium, which is optimal from a competitive standpoint and thus will propably be choosen by the two prisoners given their situation, is the only stratgy that is not favourable for the group.
     \label{ex:prisoners-dilemma-nash}
 \end{example}
 
@@ -247,9 +275,9 @@ Now we can formulate the following
     \label{ex:rock-paper-scissors-nash}
 \end{example}
 
-Here are a few properties of Nash equilibria, some of which we have already seen in the preceding examples.
+Here are a few properties of Nash equilibria~\cite{bressan2010}, some of which we have already seen in the preceding examples.
 \begin{lemma}
-    Consider a game $\Gamma = \{X_i, \Phi_i\}_{i=1}^N$.
+    Consider a $N$-player game $\Gamma = \{X_i, \Phi_i\}_{i=1}^N$.
     \begin{enumerate}
         \item A Nash equilibrium may not exist.
         \item A Nash equilibrium need not be unique.
@@ -285,7 +313,7 @@ Here are a few properties of Nash equilibria, some of which we have already seen
 \section{Theorem on the Existence of Nash Equilibria}
 \label{sec:existence-nash}
 
-In this section we want to prove a theorem on the existence of Nash equilibria. To do this, we need to place suitable assumptions on the payoff functions $\Phi_i$, i.e. suitable convexity (or in this case concavity) assumptions.
+In this section, we continue with our analysis of Nash equilibria and prove an existence theorem. To do this, we need to place suitable assumptions on the payoff functions $\Phi_i$, i.e. suitable convexity (or in this case concavity) assumptions.
 Let us first define what a concave function is.
 \begin{definition}
     A set $X \subset \R^n$ is called convex, iff for all $x, y \in X$ and $\lambda \in (0,1)$, we also have
@@ -310,23 +338,23 @@ Let us first define what a concave function is.
     \label{def:convex-function}
 \end{definition}
 
-Let us now formulate the theorem.
-\begin{theorem}
-    Consider the game $\Gamma = \{X_i, \Phi_i\}_{i=1}^N$. Assume $X_i \subset \R^n$ are compact, convex and $\Phi_i$ are continuous. Further assume
+Let us now formulate the existence theorem, which is the $N$-player equivalent of the one found in~\cite{bressan2010}.
+\begin{theorem}[Existence of Nash equilibria]
+    Consider the $N$-player game \mbox{$\Gamma = \{X_i, \Phi_i\}_{i=1}^N$}. Assume $X_i \subset \R^n$ are compact, convex and $\Phi_i$ are continuous. Further assume
     \begin{equation*}
         x_i \mapsto \Phi_i(x_i, x_{-i})\text{ is concave for all }x_{-i} \in \bigchi^{-i}
     \end{equation*}
-    for all $i=1,\dotsc,N$. Then the (non-cooperative) game $\Gamma$ admits a Nash equilibrum.
+    for all $i=1,\dotsc,N$. Then, the game $\Gamma$ admits a Nash equilibrum.
     \label{thm:existence-nash}
 \end{theorem}
 
-To prove this result, we are going to use the fixpoint theorem of Kakutani \todo{reference}. Recall that by lemma~\ref{}, $x^* \in \bigchi$ is a Nash equilibrium if and only if it is a fixed point of the best reply map $S$. First, a quick remark on notation:
+To prove this result, we are going to use the fixpoint theorem of Kakutani (which can be found in the appendix of \cite{bressan2010}). Recall that by lemma~\ref{lem:nash-fixed-point}, $x^* \in \bigchi$ is a Nash equilibrium if and only if it is a fixed point of the best reply map $S$. First, a quick remark on notation:
 \begin{remark}
     For a set-valued function $f: X \rightarrow \mathrm{Pot}(Y)$ we write $f: X \rightrightarrows Y$. If $f$ is set-valued we also call it a multifunction.
     \label{rem:multifunction}
 \end{remark}
 
-\begin{theorem}[Fixpoint Theorem of Kakutani \todo{reference}]
+\begin{theorem}[Fixpoint Theorem of Kakutani]
     Let $K \subset \R^n$ be compact and convex. Let $F: K \rightrightarrows \R^n$ be an upper semicontinuous multifunction with compact, convex values. Assume that $F(x) \subset K$ for all $x \in K$. Then there exists $x^* \in K$ such that
     \begin{equation*}
         x^* \in F(x^*).
@@ -334,9 +362,9 @@ To prove this result, we are going to use the fixpoint theorem of Kakutani \todo
     \label{thm:kakutani}
 \end{theorem}
 
-To cope with the notion of a upper semicontinuous multifunctions in the preceding theorem, we are going to use the following characterization and refer to \todo{reference} for a proof.
+To cope with the notion of a upper semicontinuous multifunction in the preceding theorem, we are going to use the following characterization~\cite{bressan2010}.
 \begin{lemma}
-    Let $Y$ be compact, $F \rightrightarrows Y$ a multifunction with nonempty, compact values. Then the following are equivalent:
+    Let $F : X \rightrightarrows \R^n$ be a bounded multifunction with compact values. Then the following are equivalent:
     \begin{enumerate}
         \item F is upper semicontinuous, i.e. $\forall x \in X \, \forall \varepsilon > 0 \, \exists \delta > 0$ such that
             \begin{equation*}
@@ -353,7 +381,7 @@ To cope with the notion of a upper semicontinuous multifunctions in the precedin
     \begin{align*}
         S_i(x_i) & = \argmax_{x_i \in X_i} \Phi_i(x_i, x_{-i})\\
         & = \{ x_i \in X_i : \Phi_i(x_i, x_{-i}) = \max_{\omega \in X_i} \Phi_i(\omega, x_{-i})\}\\
-        & = \{ x_i \in X_i : \Phi_i(x_i, x_{-i}) = m_i(x_{-i})\} \not= \emptyset
+        & = \{ x_i \in X_i : \Phi_i(x_i, x_{-i}) = m_i(x_{-i})\}% \not= \emptyset
     \end{align*}
     where $m_i(x_{-i}) \coloneqq \max_{\omega \in X_i} \Phi(\omega, x_{-i})$. Note that $m_i$ is continuous, because of the compactness of $\bigchi^{-i}$ and continuity if $\Phi_i$.
     We make the following claims:
@@ -365,7 +393,7 @@ To cope with the notion of a upper semicontinuous multifunctions in the precedin
     \begin{equation*}
         S: \bigchi \rightrightarrows \bigchi,\, x \mapsto S(x) \coloneqq S_1(x_{-1}) \times \cdots \times S_N(x_{-N}).
     \end{equation*}
-    The properties of $S_i(x_{-i})$ (i.e. nonempty, compact and convex) also hold for the cartesian product. Thus, $S$ has nonempty, compact and convex values. With that, we satisfy the conditions of lemma~\ref{lem:uppersemicontinuous-graph-closed}. Let us now look at
+    The properties of $S_i(x_{-i})$ (i.e. compact and convex) also hold for the cartesian product. Thus, $S$ has compact and convex values. With that, we satisfy the conditions of lemma~\ref{lem:uppersemicontinuous-graph-closed}. Note that $\bigchi$ is bounded, thus $S$ is also bounded. Let us now look at
     \begin{equation*}
         \graph(S) = \{ (x, x') \in \bigchi \times \bigchi : x' \in S(x)\}.
     \end{equation*}
@@ -384,15 +412,19 @@ To cope with the notion of a upper semicontinuous multifunctions in the precedin
         & \Phi_i(\omega'_i, \omega_{-i}) = m_i(\omega_{-i}) && \forall i=1,\dotsc,N\\
         \Leftrightarrow { } & \omega' \in S(\omega).
     \end{alignat*}
-    Thus,  $(\omega, \omega') \in \graph(S)$. This means $\graph(S)$ is closed and, by lemma~\ref{lem:uppersemicontinuous-graph-closed}, $S$ is uppersemicontinuous. The Fixpoint Theorem of Kakutani yields a fixed point $x^* \in S(x^*)$ which is, by lemma~\ref{}, a Nash equilibrium.
+    Thus,  $(\omega, \omega') \in \graph(S)$. This means $\graph(S)$ is closed and, by lemma~\ref{lem:uppersemicontinuous-graph-closed}, $S$ is uppersemicontinuous. The Fixpoint Theorem of Kakutani yields a fixed point $x^* \in S(x^*)$ which is, by lemma~\ref{lem:nash-fixed-point}, a Nash equilibrium.
 
     It remains to proof the claims from above:
     \begin{enumerate}
-        \item Note that $S_i(x_{-i})$ is bounded as a subset of $X_i$, which itself is bounded. Let us take a convergent sequence $(\omega_n)_{n \in \N} \subset S_i(x_{-i})$, i.e.
+        \item Note that $S_i(x_{-i})$ is bounded as a subset of $X_i$, which itself is bounded.
+
+            Let us take a convergent sequence $(\omega_n)_{n \in \N} \subset S_i(x_{-i})$, i.e.
             \begin{equation*}
                 \omega_n \rightarrow \omega \quad \text{for} \quad n \rightarrow \infty
             \end{equation*}
-            for some $\omega \in X_i$. We show $\omega \in S_i(x_{-i})$. As for $n \in \N$, $\omega_n \in S_i(x_{-i})$ it holds that $\Phi_i(\omega_n, x_{-i}) = m_i(x_{-i})$ and, as $\Phi_i$ is continuous, $\Phi_i(\omega, x_{-i}) = m_i(x_{-i})$. Thus, $\omega \in S_i(x_{-i})$ which means $S_i(x_{-i})$ is closed. Thus, it is compact.
+            for some $\omega \in X_i$. We show $\omega \in S_i(x_{-i})$. As for $n \in \N$, $\omega_n \in S_i(x_{-i})$ it holds that $\Phi_i(\omega_n, x_{-i}) = m_i(x_{-i})$ and, as $\Phi_i$ is continuous, $\Phi_i(\omega, x_{-i}) = m_i(x_{-i})$. Thus, $\omega \in S_i(x_{-i})$ which means $S_i(x_{-i})$ is closed.
+            
+            In total, $S_i(x_{-i})$ is compact.
         \item Let $\omega_i, \omega_2 \in S_i(x_{-i})$, i.e.
             \begin{equation*}
                 \Phi_i(\omega_1, x_{-i}) = \Phi_i(\omega_2, x_{-i}) = m_i(x_{-i}).
@@ -403,7 +435,9 @@ To cope with the notion of a upper semicontinuous multifunctions in the precedin
                 & \geq \lambda \Phi_i(\omega_1, x_{-i}) + (1 - \lambda) \Phi_i(\omega_2, x_{-i})\\
                 & = m_i(x_{-i}).
             \end{align*}
-            Thus, all inequalities are equal and $\lambda \omega_1 + (1 - \lambda) \omega_2 \in S_i(x_{-i})$. This means $S_i(x_{-i})$ is convex.
+            Thus, all inequalities are equal and $\lambda \omega_1 + (1 - \lambda) \omega_2 \in S_i(x_{-i})$.
+            
+            This means $S_i(x_{-i})$ is convex.
     \end{enumerate}
 \end{proof}
 
@@ -415,7 +449,7 @@ To cope with the notion of a upper semicontinuous multifunctions in the precedin
 
 As we have seen in theorem~\ref{thm:existence-nash}, one can guarantee the existence of a Nash equilibrium under suitable convexity assumptions. To achive a general existence result, we need to relax our notion of what a strategy is. Let us look at the following
 \begin{definition}
-    Consider a game $\Gamma = \{X_i, \Phi_i\}_{i=1}^N$. A randomized strategie is a probability measure $\mu_i \in \P(X_i)$, where $\P(X_i)$ is the set of all probability measures on the set of strategies $X_i$. The corresponding payoff functions are defined as
+    Consider a $N$-player game $\Gamma = \{X_i, \Phi_i\}_{i=1}^N$. A randomized strategie is a probability measure $\mu_i \in \P(X_i)$, where $\P(X_i)$ is the set of all probability measures on the set of strategies $X_i$. The corresponding payoff functions are defined as
     \begin{equation*}
         \widetilde{\Phi}_i(\mu_i) = \int_{\bigchi} \, \Phi_i(x_i, x_{-i})\ \mathrm{d}(\mu_i, \mu_{-i}).
     \end{equation*}
@@ -432,9 +466,9 @@ As we have seen in theorem~\ref{thm:existence-nash}, one can guarantee the exist
     \label{rem:pure-strategies}
 \end{remark}
 
-With this relaxed notion of strategy, we will be able to prove the following
-\begin{theorem}[Existence of Nash Equilibria for randomized strategies]
-    Consider a game in randomized strategies $\widetilde{\Gamma} = \{\P(X_i), \widetilde{\Phi}_i\}_{i=1}^N$. Let $X_i$ be compact metric spaces and let the underlying payoff functions $\Phi_i$ be continuous. Then there exists a Nash equilibrium in randomized strategies, i.e. there exists $\mu^*_i \in \P(X_i)$ such that
+With this relaxed notion of strategy, we will be able to prove the following. Again, we refer to~\cite{bressan2010} for the $2$-player equivalent.
+\begin{theorem}[Existence of Nash equilibria for randomized strategies]
+    Consider a $N$-player game in randomized strategies $\widetilde{\Gamma} = \{\P(X_i), \widetilde{\Phi}_i\}_{i=1}^N$. Let $X_i$ be compact metric spaces and let the underlying payoff functions $\Phi_i$ be continuous. Then there exists a Nash equilibrium in randomized strategies, i.e. there exists $\mu^*_i \in \P(X_i)$ such that
     \begin{equation*}
         \widetilde{\Phi}_i(\mu_i, \mu^*_{-i}) \leq \widetilde{\Phi}_i(\mu^*_i, \mu^*_{-i}) \quad \forall \mu_i \in \P(X_i)
     \end{equation*}
@@ -443,6 +477,7 @@ With this relaxed notion of strategy, we will be able to prove the following
 \end{theorem}
 
 \begin{proof}
+    Note that we will sometimes switch from subscript to superscript as purposed in notation~\ref{not:notation}.
     \begin{enumerate}
         \item Let us first consider the following (simple) case where each $X_i$ is finite, i.e.
             \begin{equation*}
@@ -452,7 +487,7 @@ With this relaxed notion of strategy, we will be able to prove the following
             \begin{equation*}
                 \Phi^i_{\mi{k}_i,\mi{k}_{-i}} \coloneqq \Phi^i(x^i_{\mi{k}_i}, x^{-i}_{\mi{k}_{-i}})
             \end{equation*}
-            where $\mi{k} \in \I \coloneqq \{k = (k_1, \dotsc, k_N) : 1 \leq k_i \leq n_i \text{ for all } i = 1,\dotsc,N\}$ is a (feasible) multiindex.
+            where $\mi{k} \in \I \coloneqq \{k = (k_1, \dotsc, k_N) \in \N^N : 1 \leq k_i \leq n_i \text{ for all } i = 1,\dotsc,N\}$ is a (feasible) multiindex.
 
             In this setting, a randomized strategy for player $i$, i.e. probability measure on $X_i$, is uniquely determined by a vector $\hat{x}^i = (\hat{x}^i_1, \dotsc, \hat{x}^i_{n_i}) \in \Delta_{n_i}$ where
             \begin{equation*}
@@ -462,9 +497,10 @@ With this relaxed notion of strategy, we will be able to prove the following
 
             For the payoff functions $\widetilde{\Phi}^i : \bigtimes_{i=1}^N \Delta_{n_i} \rightarrow \R$ there holds
             \begin{equation*}
-                \widetilde{\Phi}^i(\hat{x}_i, \hat{x}_{-i}) = \sum_{\mi{k} \in \I}\left( \Phi^i_{\mi{k}_i, \mi{k}_{-i}} \hat{x}^i_{\mi{k}_i} \prod_{j \not= i} \hat{x}^j_{\mi{k}_j} \right).
+                %\widetilde{\Phi}^i(\hat{x}^i, \hat{x}^{-i}) = \sum_{\mi{k} \in \I}\left( \Phi^i_{\mi{k}_i, \mi{k}_{-i}} \hat{x}^i_{\mi{k}_i} \prod_{j \not= i} \hat{x}^j_{\mi{k}_j} \right).
+                \widetilde{\Phi}^i(\hat{x}^i, \hat{x}^{-i}) = \sum_{\mi{k} \in \I}\left( \Phi^i_{\mi{k}_i, \mi{k}_{-i}} \prod_{j=1}^N \hat{x}^j_{\mi{k}_j} \right).
             \end{equation*}
-            We see that $\widetilde{\Phi}^i$ are linear in each component, hence continuous. In particular $\widetilde{\Phi}^i$ is linear in its $i$-th component, thus also concave in its $i$-th component. We can apply theorem~\ref{thm:existence-nash} to optain the existence of a Nash equilibrium $\hat{x}_* \in \Delta_{n_1} \times \cdots \times \Delta_{n_N}$.
+            We see that $\widetilde{\Phi}^i$ are linear in each component, hence continuous. In particular $\widetilde{\Phi}^i$ is linear in its $i$-th component, thus also concave in its $i$-th component. We can apply theorem~\ref{thm:existence-nash} to optain the existence of a Nash equilibrium $\hat{x}^* \in \Delta_{n_1} \times \cdots \times \Delta_{n_N}$.
         \item Using an approximation argument we extend the result from above to the general case where $X_i$ are compact metrix spaces.
 
             Let $\{x^i_j\}_{j \in \N}$ be a sequence of points dense in $X_i$. For each $n \geq 1$, we consider the game where players may only choose among the strategies $X'_i = \{x^i_1, \dotsc, x^i_n\}.$ By step 1, this game admits a Nash equilibrium solution in randomized strategies $\mu^i_n \in \P(X'_i)$.
@@ -491,9 +527,9 @@ With this relaxed notion of strategy, we will be able to prove the following
             \begin{equation*}
                 \B^i \coloneqq \{ B(x^i_j, \delta) , j = 1,\dotsc,M\}
             \end{equation*}
-            is still a convering of $X_i$.
+            is still a covering of $X_i$.
 
-            Let $\{\varphi^i_1, \dotsc, \varphi^i_M\}$ be a continuous partition of unity on $X_i$, subordinate to the covering $\B^i$.
+            Let $\{\varphi^i_1, \dotsc, \varphi^i_M\}$ be a continuous partition of unity on $X_i$, subordinate to the covering $\B^i$. For further reading on paritions of unity and their properties we refer to~\cite{alt2006}.
 
             Any probability measure $\mu^i \in \P(X_i)$ can be approximated by a probability measure $\hat{\mu}^i$ supported on $X'_i = \{x^i_1, \dotsc, x^i_M\}$. This approximation is unique by setting
             \begin{equation*}
@@ -505,13 +541,15 @@ With this relaxed notion of strategy, we will be able to prove the following
                 \label{eq:randomized-nash-existence-proof-int-eps}
             \begin{aligned}
                 & \left | \int_{\bigchi} \Phi^i(x_i, x_{-i}) \ \mathrm{d}(\mu^i, \mu^{-i}) - \int_{\bigchi} \Phi^i(x_i, x_{-i}) \ \mathrm{d}(\hat{\mu}^i, \hat{\mu}^{-i}) \right |\\
-                \leq & \int_{\bigchi} \sum_{\mi{k} \in \N^N} \varphi^i_{k_i}(x^i_{k_i}) \prod_{j \not= i} \varphi^j_{k_j}(x^j_{k_j}) | \Phi^i(x_i, x_{-i}) - \Phi^i(x^i_{k_i}, x^j_{k_j}) | \ \mathrm{d}(\mu^i, \mu^{-i})\\
+                %\leq & \int_{\bigchi} \sum_{\mi{k} \in \N^N} \varphi^i_{k_i}(x^i_{k_i}) \prod_{j \not= i} \varphi^j_{k_j}(x^j_{k_j}) | \Phi^i(x_i, x_{-i}) - \Phi^i(x^i_{k_i}, x^j_{k_j}) | \ \mathrm{d}(\mu^i, \mu^{-i})\\
+                \leq & \int_{\bigchi} \sum_{\mi{k} \in \I} \prod_{j = 1}^N \varphi^j_{k_j}(x^j_{k_j}) | \Phi^i(x_i, x_{-i}) - \Phi^i(x^i_{k_i}, x^j_{k_j}) | \ \mathrm{d}(\mu^i, \mu^{-i})\\
                 \leq & \int_{\bigchi} \varepsilon \ \mathrm{d}(\mu^i, \mu^{-i}) = \varepsilon
             \end{aligned}
             \end{equation}
             where we used that
             \begin{equation*}
-                \sum_{\mi{k} \in \N^N} \varphi^i_{k_i}(x^i_{k_i}) \prod_{j \not= i} \varphi^j_{k_j}(x^j_{k_j}) = \left ( \sum_{1 \leq k_i \leq n_i} \varphi^i_{k_i}(x^i_{k_i}) \right ) \prod_{j \not= i} \left( \sum_{1 \leq k_j \leq n_j} \varphi^j_{k_j}(x^j_{k_j}) \right) = 1
+                %\sum_{\mi{k} \in \N^N} \varphi^i_{k_i}(x^i_{k_i}) \prod_{j \not= i} \varphi^j_{k_j}(x^j_{k_j}) = \left ( \sum_{1 \leq k_i \leq n_i} \varphi^i_{k_i}(x^i_{k_i}) \right ) \prod_{j \not= i} \left( \sum_{1 \leq k_j \leq n_j} \varphi^j_{k_j}(x^j_{k_j}) \right) = 1
+                \sum_{\mi{k} \in \I} \prod_{j = 1}^N \varphi^j_{k_j}(x^j_{k_j}) = \prod_{j = 1}^N \left( \sum_{1 \leq k_j \leq n_j} \varphi^j_{k_j}(x^j_{k_j}) \right) = 1
             \end{equation*}
             by the partition of unity property.
         \item For all $j = 1,\dotsc,M$, as $n \rightarrow \infty$ the weak convergence \eqref{eq:randomized-nash-existence-proof-weak-convergence} yields
@@ -520,7 +558,7 @@ With this relaxed notion of strategy, we will be able to prove the following
                 \hat{\mu}^i_n(\{x^i_j\}) = \int \varphi^i_j \ \mathrm{d}\mu^i_n \rightarrow \int \varphi^i_j \ \mathrm{d}\mu^i_* = \hat{\mu}^i_*(\{x^i_j\}).
             \end{equation}
 
-            Recall that, for $\mu^i \in \P(X_i)$ and $n \geq M$, $\hat{\mu}$ is supported on the finite set $X'_i = \{x^i_1, \dotsc, x^i_M\}$ and $\mu^i_n$ provides a Nash equilibrium to the game restricted to the sets $X'_i = \{x^i_1, \dotsc, x^i_n\}$. Thus,
+            Recall that, for $\mu^i \in \P(X_i)$ and $n \geq M$, $\hat{\mu}$ is supported on the finite set $\{x^i_1, \dotsc, x^i_M\}$ and $\mu^i_n$ provides a Nash equilibrium to the game restricted to the sets $X'_i = \{x^i_1, \dotsc, x^i_n\}$. Thus,
             \begin{equation}
             \label{eq:randomized-nash-existence-proof-C}
             \widetilde{\Phi}^i(\hat{\mu}^i, \mu^{-i}_n) \leq \widetilde{\Phi}^i(\mu^i, \mu^{-i}_n).
@@ -541,15 +579,15 @@ With this relaxed notion of strategy, we will be able to prove the following
 \section{Zero-Sum Games}
 \label{sec:zero-sum-games}
 
-because the following theory seems not to be available in the literature for an arbitraty number of players, we are going to restrict outselves to $2$ player games. For example, we could not find an equivalent result to the Von Neumann Minimax Theorem (see theorem~\ref{thm:minimax}).
+Because the following theory seems not to be available in the literature for an arbitraty number of players, we are going to restrict outselves to $2$ player games. For example, we could not find an equivalent result to the Von Neumann Minimax Theorem (see corollary~\ref{cor:zero-sum-existence-nash}).
 
-Let us define what a zero-sum game is
+Let us first define what a $2$-player zero-sum game is.
 \begin{definition}
     Consider a $2$ player game $\Gamma = \{X_i, \Phi_i\}_{i=1,2}$. In the special case where the sum of the payoff functions is zero, i.e.
     \begin{equation*}
         \Phi_1 + \Phi_2 = 0
     \end{equation*}
-    we call this game zero-sum. We define $\Phi \coloneqq \Phi_1 = - \Phi_2$ as out single payoff function and write $\Gamma_0 = (X_1, X_2, \Phi)$ to put emphasis on the zero-sum property of the game.
+    we call this game zero-sum. We define $\Phi \coloneqq \Phi_1 = - \Phi_2$ as the single payoff function and write $\Gamma_0 = (X_1, X_2, \Phi)$ to put emphasis on the zero-sum property of the game.
     \label{def:zero-sum-game}
 \end{definition}
 
@@ -562,14 +600,14 @@ Let us define what a zero-sum game is
     \begin{equation*}
         \min_{x_2 \in X_2} \Phi(x_1, x_2).
     \end{equation*}
-    Note that the latter is equivalent to
+    Note that the latter is equivalent to the original goal of player $2$, i.e.
     \begin{equation*}
         \max_{x_2 \in X_2} -\Phi(x_1, x_2).
     \end{equation*}
     \label{rem:zero-sum-game-goal}
 \end{remark}
 
-We see that in a $2$ player zero-sum game the gain of one player is anothers loss, i.e. $\Phi_1 = -\Phi_2$.
+We see that in a $2$ player zero-sum game the gain of one player is anothers loss, i.e. $\Phi_1 = -\Phi_2$. In this sense, a zero-sum game can be considered purely competitive.
 
 The general assumption is, that each player chooses her strategy at exactly the same time, without knowledge of the other participants choices. Let us assume for a moment that this is not the case. There are two possible cases
 \begin{enumerate}
@@ -616,7 +654,7 @@ We can show the following
     where we used the definition of $\beta$ from above. As $\varepsilon > 0$ was arbitrary, this completes our proof.
 \end{proof}
 
-Based on this, we make the following definition
+Based on this, we make the following definition.
 \begin{definition}
     In the case that $V^- = V^+$ we define
     \begin{equation*}
@@ -627,9 +665,9 @@ Based on this, we make the following definition
 \end{definition}
 
 
-Let us make another definition before we discuss how definition~\ref{def:value-of-the-game}, the following definition and the Nash equilibrium are linked to one another.
+Let us make another definition before we start to discuss how the above, the following definition and the Nash equilibrium are linked to one another.
 \begin{definition}
-    Consider the $2$ player zero-sum game $\Gamma_0 = (X_1, X_2, \Phi)$. If there exists $(x^*_1, x^*_2) \in X_1 \times X_2$ such that
+    Consider a $2$-player zero-sum game $\Gamma_0 = (X_1, X_2, \Phi)$. If there exists $(x^*_1, x^*_2) \in X_1 \times X_2$ such that
     \begin{equation}
         \min_{x_2 \in X_2} \Phi(x^*_1, x_2) = \Phi(x^*_1, x^*_2) = \max_{x_1 \in X_1} \Phi(x_1, x^*_2),
         \label{eq:saddle-point}
@@ -657,7 +695,7 @@ First, a remark concerning the interpretation of a saddle point.
 The following corollary describes the connection between saddle points and Nash equilibria for $2$ player zero-sum games.
 
 \begin{corollary}
-    For a $2$ player zero-sum game $\Gamma_0$ the concept of a saddle point is equivalent to that of a Nash equilibrium.
+    For a $2$-player zero-sum game $\Gamma_0$ the concept of a saddle point is equivalent to that of a Nash equilibrium.
     \label{cor:saddle-point-nash}
 \end{corollary}
 
@@ -678,7 +716,7 @@ The following corollary describes the connection between saddle points and Nash 
     \end{enumerate}
 \end{proof}
 
-Let us now also connect saddle points with the notion of the value of the game with the following
+Let us now also connect saddle points with the value of the game.
 \begin{theorem}
     Consider a $2$ player zero-sum game $\Gamma_0 = (X_1, X_2, \Phi)$. Assume $X_1, X_2$ to be compact matrix spaces and $\Phi$ to be continuous. Then, $\Gamma_0$ has a value $V$ if and only if a saddle point $(x^*_1, x^*_2)$ exists. In this case, there holds
     \begin{equation*}
@@ -693,6 +731,7 @@ Let us now also connect saddle points with the notion of the value of the game w
             \begin{align*}
                 V^- & = \max_{x_1 \in X_1} \min_{x_2 \in X_2} \Phi(x_1, x_2)\\
                 & \geq \min_{x_2 \in X_2} \Phi(x^*_1, x_2)\\
+                & = \Phi(x^*_1, x^*_2)\\
                 & = \max_{x_1 \in X_1} \Phi(x_1, x^*_2)\\
                 & \geq \min_{x_2 \in X_2} \max_{x_1 \in X_1} \Phi(x_1, x_2) = V^+.
             \end{align*}
@@ -730,9 +769,9 @@ Let us now also connect saddle points with the notion of the value of the game w
 
 We now state two direct implications of theorem~\ref{thm:existence-nash} and theorem~\ref{thm:randomized-strategies-existence-nash}. Note that the goal of player $2$ is to maximize $\Phi_2 = -\Phi$ and $\Phi$ being concave is equivalent to $-\Phi$ being convex by definition.
 
-The following implication of theorm~\ref{thm:existence-nash} is also called the Von Neumann Minimax Theorem \todo{referenz}
+The following implication of theorm~\ref{thm:existence-nash} is also called the Von Neumann Minimax Theorem \todo{referenz}.
 \begin{corollary}
-    Consider a $2$ player zero-sum game $\Gamma_0 = (X_1, X_2, \Phi)$. Assume $X_1, X_2$ are compact, convex metrix spaces and $\Phi$ is continuous. Moreover let
+    Consider a $2$-player zero-sum game $\Gamma_0 = (X_1, X_2, \Phi)$. Assume $X_1, X_2$ are compact, convex metric spaces and $\Phi$ is continuous. Moreover let
     \begin{alignat*}{2}
     x_1 \mapsto \Phi(x_1, x_2) & \text{ be concave } && \text{for all } x_2 \in X_2\\
     x_2 \mapsto \Phi(x_1, x_2) & \text{ be convex } && \text{for all } x_1 \in X_1.
@@ -743,7 +782,7 @@ The following implication of theorm~\ref{thm:existence-nash} is also called the 
 
 In the case of randomized strategies we get the following, as an implication of theorem~\ref{thm:randomized-strategies-existence-nash}.
 \begin{corollary}
-    Consider a $2$ player zero-sum game $\Gamma_0 = (X_1, X_2, \Phi)$. Assume $X_1, X_2$ are compact metrix spaces and $\Phi$ is continuous.
+    Consider a $2$-player zero-sum game $\Gamma_0 = (X_1, X_2, \Phi)$. Assume $X_1, X_2$ are compact metric spaces and $\Phi$ is continuous.
     Then $\Gamma_0$ has a value and a Nash equilibrium (i.e. saddle point) in the class of randomized strategies. By definition of a saddle point, there exist $(\mu^*_1, \mu^*_2) \in \P(X_1) \times \P(X_2)$ such that
     \begin{equation*}
         \int_{\bigchi} \Phi(x_1, x_2) \ \mathrm{d}(\mu_1, \mu^*_2) \leq \int_{\bigchi} \Phi(x_1, x_2) \ \mathrm{d}(\mu^*_1, \mu^*_2) \leq \int_{\bigchi} \Phi(x_1, x_2) \ \mathrm{d}(\mu^*_1, \mu_2)
@@ -753,19 +792,19 @@ In the case of randomized strategies we get the following, as an implication of 
 \end{corollary}
 
 \begin{remark}
-    As the class of pure strategies is a subset of the class of randomized strategies (remark~\ref{}), the following holds: If the game $\Gamma_0$ already has a value in the class of pure strategies, this value and the one from theorem~\ref{cor:zero-sum-randomized-strategies-existence-nash} above are the same.
+    As the class of pure strategies is a subset of the class of randomized strategies (see remark~\ref{rem:pure-strategies}), the following holds: If the game $\Gamma_0$ already has a value in the class of pure strategies, this value and the one from theorem~\ref{cor:zero-sum-randomized-strategies-existence-nash} above are the same.
 \end{remark}
 
 
 \section{The Cooperative-Competitive Solution}
 \label{sec:co-co-solution}
 
-The setting here is a bit different than in the sections before. We want to look at a $2$ player game $\Gamma = \{X_i, \Phi_i\}_{i=1,2}$ where $X_1, X_2$ are compact metric spaces and $\Phi_1, \Phi_2$ are continuous. In contrary to definition~\ref{def:static-game} the goal of the players shall now be to maximize the sum of the payoffs, i.e. adopt strategies $(x^\#_1, x^\#_2) \in X_1 \times X_2$ such that
+The setting here is a bit different than in the sections before. We want to look at a $2$-player game $\Gamma = \{X_i, \Phi_i\}_{i=1,2}$ where $X_1, X_2$ are compact metric spaces and $\Phi_1, \Phi_2$ are continuous. In contrary to definition~\ref{def:static-game} the goal of the players shall now be to maximize the sum of the payoffs, i.e. adopt strategies $(x^\#_1, x^\#_2) \in X_1 \times X_2$ such that
 \begin{equation*}
     \Phi_1(x^\#_1, x^\#_2) + \Phi(x^\#_1, x^\#_2) = \max_{(x_1, x_2) \in X_1 \times X_2} \Phi_1(x_1, x_2) + \Phi_2(x_1, x_2) \eqqcolon V^\#.
 \end{equation*}
 
-We now face the following problem: Suppose that \mbox{$\Phi_1(x^\#_1, x^\#_2) \ll \Phi_2(x^\#_1, x^\#_2)$}. As $\Phi_i$ are the payoffs the individual players earn, the adoption of $(x^\#_1, x^\#_2)$ may maximize the total payoff of the group, but may not be agreeable to player $1$. In a case like this, it may be wise to introduct a side payment $p \in \R$ from player $2$ to player $1$, say. After each player earns her reward $\Phi_i$, player $2$ pays the side payment to player $1$. If the side payment if chosen appropriately, this may convince player $1$ to adopt $(x^\#_1, x^\#_2)$ and thus maximize the group payoff. Note that in case $\Phi_2 \ll \Phi_1$, the side payment $p$ should of course be negative.
+We now face the following problem: Suppose that \mbox{$\Phi_1(x^\#_1, x^\#_2) \ll \Phi_2(x^\#_1, x^\#_2)$}. As $\Phi_i$ are the payoffs the individual players earn, the adoption of $(x^\#_1, x^\#_2)$ may maximize the total payoff of the group, but may not be agreeable to player $1$. In a case like this, it may be wise to introduct a side payment $p \in \R$ from player $2$ to player $1$, say. After each player earns her reward $\Phi_i$, player $2$ pays the side payment $p$ to player $1$. If the side payment is chosen appropriately, this may convince player $1$ to adopt $(x^\#_1, x^\#_2)$ and thus maximize the group payoff. Note that in case $\Phi_2 \ll \Phi_1$, the side payment $p$ should of course be negative.
 
 To dertermine the appropriate value of such a side payment, let us split the game $\Gamma$ into two subgames $\Gamma^\#$ and $\Gamma^\flat$ in the following way:
 \begin{align*}
@@ -786,9 +825,9 @@ which is purely cooperative and the goal is to maximize the group payoff, and
 \end{equation*}
 which is a zero-sum game and thus purely competitive. We shall use the value $V^\flat$ of the zero-sum game $\Gamma^\flat$ to dertermine the relative strength of each player and thus the side payment $p$. Note that $V^\flat$ is well-defined (at least in terms of randomized strategies) by theorem~\ref{thm:randomized-strategies-existence-nash}.
 
-We interpret a positive value of $V^\flat$ as ``player $1$ is stronger than player $2$'' and a negative value as ``player $2$ is stronger than player $1$''. The magnitude of $V^\flat$ is a measure of how much stronger that stronger player is.
+We interpret a positive value of $V^\flat$ as ``player $1$ is stronger than player $2$'' and a negative value as ``player $2$ is stronger than player $1$''. The magnitude of $V^\flat$ is a measure of just how much stronger this stronger player is.
 
-Based on this we define
+Based on this, we define
 \begin{definition}
     We call
     \begin{equation*}
@@ -798,10 +837,7 @@ Based on this we define
     \label{def:co-co-value}
 \end{definition}
 
-\begin{remark}
-    The co-co value is what each player should earn, considering her relative strength. Note that each player gets half of the playoff of the cooperative game $\Gamma^\#$ and player 1 earns an extra $V^\flat$ (if $V^\flat$ is positive, i.e. playeer $2$ is stronger).
-    \label{rem:co-co-value}
-\end{remark}
+The co-co value is what each player should earn, considering her relative strength. Note that each player gets half of the playoff of the cooperative game $\Gamma^\#$ and player 1 earns an extra $V^\flat$ (if $V^\flat$ is positive, i.e. player $1$ is stronger).
 
 \begin{definition}
     The cooperative-competitive solution (co-co solution) is a set of strategies $(x^\#_1, x^\#_2) \in X_1 \times X_2$ and a side payment $p \in \R$ from player $2$ to player $1$, such that
